@@ -23,12 +23,16 @@ class Hero {
     )
 
     this.bullets.forEach((b) => b.draw())
+    console.log('-1----------', this.bullets)
     this.clearBullets()
+    console.log('---2--------', this.bullets)
   }
 
   shoot(audioShoot) {
     console.log('is shooting!')
+
     this.bullets.push(new Bullets(this.ctx, this.posX, this.posY, this.width, this.height))
+    console.log('------3-----', this.bullets)
     // this.audioShoot = true
     audioShoot.play()
     audioShoot.volume = 0.2
@@ -37,6 +41,8 @@ class Hero {
 
   clearBullets() {
     this.bullets = this.bullets.filter(b => b.posX + 10)
+    console.log('----5-------', this.bullets)
+
   }
 }
 

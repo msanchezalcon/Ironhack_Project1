@@ -63,7 +63,7 @@ const Game = {
                 return this.winGame()
             }
 
-            if (this.isCollisionWithBullets()) {
+            if (this.touchesBullets()) {
                 console.log("monster is dead")
             }
 
@@ -128,6 +128,28 @@ const Game = {
     touchesMonster(hero) {
         console.log(this.monsterRandom)
         return this.monsterRandom.some(monster => this.isCollisionWithMonster(hero, monster))
+    },
+
+    // CHECK THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    touchesBullets() {
+        console.log(this.bullets, '-------------------------------')
+
+        for (let i = 0; i < this.monsterRandom.length; i++) {
+            let pos = this.monsterRandom[i]
+            for (let j = 0; j < this.hero.bullets.length; j++) {
+                let pos2 = this.hero.bullets[j]
+                if (pos.posX + pos.width > pos2.posX &&
+                    pos.posX < pos2.posX + pos2.height &&
+                    pos.posY + pos.height > pos2.posY &&
+                    pos.posY < pos2.posY + pos2.height) {
+                    // Remove the monster
+                    this.monsterRandom.splice(i, 1)
+                    this.hero.bullets.splice(j, 1)
+                    break;
+                }
+            }
+        }
+        console.log(this.bullets, '-------------------------------')
     },
 
     overlap(hero, wall) {
@@ -207,24 +229,27 @@ const Game = {
         return false
     },
 
-    isCollisionWithBullets() {
-        this.monsterRandom.some(mons => {
-            if (
-                mons.posX + mons.width >= this.hero.bullets.posX &&
-                mons.posY + mons.height >= this.hero.bullets.posY &&
-                mons.posX <= this.hero.bullets.posX + this.hero.width &&
-                mons.posY < this.hero.bullets.posY + this.hero.height
-            ) {
-                console.log('we shot monster!')
-                console.log(this.monsterRandom)
-                this.audio.monster.play()
-                this.audio.monster.volume = 0.2
-                this.audio.monster.duration = 1
-                this.monsterRandom.splice(mons)
-                clearInterval(this.interval)
-            }
-        })
-    },
+    // isCollisionWithBullets() {
+    //     console.log('-------d----', this.bullets)
+    //     this.monsterRandom.some(mons => {
+    //         if (
+    //             mons.posX + mons.width >= this.hero.bullets.posX &&
+    //             mons.posY + mons.height >= this.hero.bullets.posY &&
+    //             mons.posX <= this.hero.bullets.posX + this.hero.width &&
+    //             mons.posY < this.hero.bullets.posY + this.hero.height
+    //         ) {
+    //             console.log('we shot monster!')
+    //                console.log(this.monsterRandom)
+    //             this.audio.monster.play()
+    //             this.audio.monster.volume = 0.2
+    //             this.audio.monster.duration = 1
+    //             this.monsterRandom.splice(mons)
+    //             clearInterval(this.interval)
+    //         }
+    //     })
+
+    //
+    // },
 
     isCollisionWithJack() {
         if (
