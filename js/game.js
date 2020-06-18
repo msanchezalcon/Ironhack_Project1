@@ -52,20 +52,12 @@ const Game = {
             this.clear()
             this.drawAll()
             this.generatorMonster()
-            //   console.log(this.isCollisionWithMonster())
 
 
             if (this.touchesMonster(this.hero)) {
                 console.log("you lose")
                 this.gameOver()
             }
-
-            // if (this.checkCol == true) {
-            //     return this.gameOver()
-            //     console.log('player dead')
-            // } else {
-            //     console.log('you are still alive')
-            // }
 
             if (this.isCollisionWithJack()) {
                 return this.winGame()
@@ -115,7 +107,6 @@ const Game = {
             this.obstacles = new Obstacle(this.ctx, this.canvasSize.w / 2 - 450, this.canvasSize.h / 2 - 250, this.canvasSize.w, this.canvasSize.h)
             this.generalObstacle.push(this.obstacles)
         }
-        //console.log(this.generalObstacle)
     },
 
     generatorMonster() {
@@ -206,34 +197,12 @@ const Game = {
         }
     },
 
-
-
-
-    // isCollisionWithMonster() {
-
-    //     this.monsterRandom.some(mons => {
-    //         console.log(mons.posX, mons.posY, mons.width, mons.height)
-    //         console.log(this.hero.posX, this.hero.posY, this.hero.width, this.hero.height)
-    //         if (
-    //             this.hero.posX + this.hero.width >= mons.c &&
-    //             this.hero.posY + this.hero.height >= mons.posY &&
-    //             this.hero.posX <= mons.posX + mons.width
-    //         ) {
-    //             return this.checkCol = true
-
-    //         } else {
-    //             console.log('----------------- colisión monster else')
-    //         }
-    //     })
-    // },
-
-
     isCollisionWithMonster(hero, mos) {
         if (hero.posX + hero.width > mos.posX &&
             hero.posX < mos.posX + mos.width &&
             hero.posY + hero.height > mos.posY &&
             hero.posY < mos.posY + mos.height) {
-            return true;
+            return true
         }
         return false
     },
