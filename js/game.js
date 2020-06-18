@@ -19,7 +19,7 @@ const Game = {
     monsterRandom: [],
     audio: {
         treasure: new Audio("./audio/whistle.mp3"),
-        hero: new Audio("./audio/baby.mp3"),
+        hero: new Audio("./audio/womancry.mp3"),
         bullets: new Audio("./audio/gun.mp3"),
         monster: new Audio("./audio/monster.mp3")
     },
@@ -166,36 +166,36 @@ const Game = {
                 case this.keys.LEFT:
                     trackPosX -= trackSpeed
                     if (!this.touchesWalls({
-                            ...this.hero,
-                            posX: trackPosX
-                        })) {
+                        ...this.hero,
+                        posX: trackPosX
+                    })) {
                         this.moveDirection("left")
                     }
                     break;
                 case this.keys.RIGHT:
                     trackPosX += trackSpeed
                     if (!this.touchesWalls({
-                            ...this.hero,
-                            posX: trackPosX
-                        })) {
+                        ...this.hero,
+                        posX: trackPosX
+                    })) {
                         this.moveDirection("right")
                     }
                     break;
                 case this.keys.UP:
                     trackPosY -= trackSpeed
                     if (!this.touchesWalls({
-                            ...this.hero,
-                            posY: trackPosY
-                        })) {
+                        ...this.hero,
+                        posY: trackPosY
+                    })) {
                         this.moveDirection("up")
                     }
                     break;
                 case this.keys.DOWN:
                     trackPosY += trackSpeed
                     if (!this.touchesWalls({
-                            ...this.hero,
-                            posY: trackPosY
-                        })) {
+                        ...this.hero,
+                        posY: trackPosY
+                    })) {
                         this.moveDirection("down")
                     }
                     break;
