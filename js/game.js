@@ -56,8 +56,8 @@ const Game = {
 
 
             if (this.touchesMonster(this.hero)) {
-                console.log("WINNNNNN")
-                // this.gameOver()                                    descomentar luego  !!!!!! <<<<<<<<<<<<<<<
+                console.log("you lose")
+                this.gameOver()
             }
 
             // if (this.checkCol == true) {
@@ -72,7 +72,7 @@ const Game = {
             }
 
             if (this.isCollisionWithBullets()) {
-                console.log("monster dead")
+                console.log("monster is dead")
             }
 
         }, 1000)
