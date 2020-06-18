@@ -6,10 +6,9 @@ const Game = {
     license: undefined,
     canvasDom: undefined,
     ctx: undefined,
-    canvasSize: {
-        w: 900,
-        h: 500
-    },
+    // canvasSizeW: undefined,
+    // canvasSizeH: undefined,
+    canvasSizeW
     background: undefined,
     hero: undefined,
     monster: undefined,
@@ -26,74 +25,58 @@ const Game = {
     obstacles: undefined,
     checkCol: undefined,
     interval: undefined,
-    keys: {
-        UP: 38,
-        LEFT: 37,
-        RIGHT: 39,
-        SPACE: 32,
-        DOWN: 40
-    },
 
     init() {
+        console.log("estoy leyendo el init de game.js")
         this.canvasDom = document.getElementById("board")
         this.ctx = this.canvasDom.getContext("2d")
         this.canvasDom.setAttribute("width", this.canvasSize.w)
         this.canvasDom.setAttribute("height", this.canvasSize.h)
+        this.setDimensions()
         this.generatorObstacles()
         this.start()
     },
 
+    setDimensions() {
+        this.canvasSizeW = 900
+        this.canvasSizeH = 500
+        this.canvasDom.width = this.width
+        this.canvasDom.height = this.height
+    },
 
     start() {
         this.reset()
-        this.setListeners()
 
         this.interval = setInterval(() => {
             this.clear()
             this.drawAll()
+            this.moveHero()
             this.generatorMonster()
-            //   console.log(this.isCollisionWithMonster())
-
-
-            if (this.touchesMonster(this.hero)) {
-                console.log("WINNNNNN")
-                // this.gameOver()                                    descomentar luego  !!!!!! <<<<<<<<<<<<<<<
-            }
-
-            // if (this.checkCol == true) {
-            //     return this.gameOver()
-            //     console.log('player dead')
-            // } else {
-            //     console.log('you are still alive')
-            // }
-
-            if (this.isCollisionWithJack()) {
-                return this.winGame()
-            }
-
-            if (this.isCollisionWithBullets()) {
-                console.log("monster dead")
-            }
-
+            //    this.isCollisionWithMonster() ? console.log('player dead') : null
+            this.isCollisionWithJack() ? this.winGame() : null
+            this.isCollisionWithBullets() ? console.log("monster dead") : null
         }, 1000)
     },
 
     reset() {
         this.hero = new Hero(
             this.ctx,
-            this.canvasSize.w / 2 - 450,
-            this.canvasSize.h / 2 - 250
+            this.canvasSizeW / 2 - 450,
+            this.canvasSizeH / 2 - 250,
+            this.posX,
+            this.posY,
+            this.canvasSizeW
         )
         this.background = new Background(
             this.ctx,
-            this.canvasSize.w / 2 - 450,
-            this.canvasSize.h / 2 - 250
+            this.canvasSizeW / 2 - 450,
+            this.canvasSizeH / 2 - 250
         )
 
         this.treasure = new Treasure(
             this.ctx,
-            this.canvasSize.w / 2 + 450 - 65,
-            this.canvasSize.h / 2 + 250 - 70
+            this.canvasSizeW / 2 + 450 - 65,
+            this.canvasSizeH / 2 + 250 - 70
         )
     },
 
@@ -112,14 +95,14 @@ const Game = {
 
     generatorObstacles() {
         for (let i; this.generalObstacle.length < 40; i++) {
-            this.obstacles = new Obstacle(this.ctx, this.canvasSize.w / 2 - 450, this.canvasSize.h / 2 - 250, this.canvasSize.w, this.canvasSize.h)
+            this.obstacles = new Obstacle(this.ctx, this.canvasSizeW / 2 - 450, this.canvasSizeH / 2 - 250, this.canvasSize., this.canvasSize.h)
             this.generalObstacle.push(this.obstacles)
         }
         //console.log(this.generalObstacle)
     },
 
     generatorMonster() {
-        this.monsterRandom.push(new Monster(this.ctx, this.canvasSize.w / 2 - 450, this.canvasSize.h / 2 - 250, this.canvasSize.w, this.canvasSize.h))
+        this.monsterRandom.push(new Monster(this.ctx, this.canvasSize.w, this.canvasSize.h, this.canvasSize.w, this.canvasSize.h))
         console.log(this.monsterRandom)
     },
 
@@ -128,125 +111,227 @@ const Game = {
         console.log(this.monsterRandom)
     },
 
-
-
-    touchesWalls(hero) {
-        return this.generalObstacle.some(obs => this.overlap(hero, obs))
-    },
-
-    touchesMonster(hero) {
-        console.log(this.monsterRandom)
-        return this.monsterRandom.some(monster => this.isCollisionWithMonster(hero, monster))
-    },
-
-    overlap(hero, wall) {
-        //console.log(“VALORES”, hero.posX, hero.posY, hero.width, hero.height, wall.obstX, wall.obstY, wall.obstW, wall.obstH)
-        if (hero.posX + hero.width > wall.obstX &&
-            hero.posX < wall.obstX + wall.obstW &&
-            hero.posY + hero.height > wall.obstY &&
-            hero.posY < wall.obstY + wall.obstH) {
-            return true;
-        }
-        return false;
-    },
-
-    moveDirection(dir) {
-        dir === 'left' ? this.hero.posX -= this.hero.speed : null
-        dir === 'right' ? this.hero.posX += this.hero.speed : null
-        dir === 'up' ? this.hero.posY -= this.hero.speed : null
-        dir === 'down' ? this.hero.posY += this.hero.speed : null
-    },
-
-    setListeners() {
+    moveHero() {
         document.onkeydown = e => {
-            let trackPosX = this.hero.posX
-            let trackPosY = this.hero.posY
-            let trackSpeed = this.hero.speed
-            switch (e.keyCode) {
-                case this.keys.LEFT:
-                    trackPosX -= trackSpeed
-                    if (!this.touchesWalls({
-                            ...this.hero,
-                            posX: trackPosX
-                        })) {
-                        this.moveDirection("left")
-                    }
-                    break;
-                case this.keys.RIGHT:
-                    trackPosX += trackSpeed
-                    if (!this.touchesWalls({
-                            ...this.hero,
-                            posX: trackPosX
-                        })) {
-                        this.moveDirection("right")
-                    }
-                    break;
-                case this.keys.UP:
-                    trackPosY -= trackSpeed
-                    if (!this.touchesWalls({
-                            ...this.hero,
-                            posY: trackPosY
-                        })) {
-                        this.moveDirection("up")
-                    }
-                    break;
-                case this.keys.DOWN:
-                    trackPosY += trackSpeed
-                    if (!this.touchesWalls({
-                            ...this.hero,
-                            posY: trackPosY
-                        })) {
-                        this.moveDirection("down")
-                    }
-                    break;
-                case this.keys.SPACE:
-                    this.hero.shoot(this.audio.bullets)
-                    break;
+            if (e.keyCode === 37) {
+                this.move('left')
+            } else if (e.keyCode === 39) {
+                this.move('right')
+            } else if (e.keyCode === 38) {
+                this.move('up')
+            } else if (e.keyCode === 40) {
+                this.move('down')
+            } else if (e.keyCode === 32) {
+                this.hero.shoot(this.audio.bullets)
+            } else {
+                return null
             }
         }
     },
 
+    checkObsBr() {
+        this.checkCol = false
+        let posXheroW = this.hero.posX + this.hero.width
+        let posYheroH = this.hero.posY + this.hero.height
+
+        //BR check Position X and Position BR
+        this.generalObstacle.some(obs => {
+
+            if (posXheroW >= obs.obstX &&
+                posXheroW <= (obs.obstX + obs.obstW) &&
+                posYheroH >= obs.obstY &&
+                posYheroH <= (obs.obstY + obs.obstH)) {
+                //  this.hero.speed = 0
+                console.log('BR está en al zona X e Y ¡CHOCA!')
+                return this.checkCol = true
+            }
+        })
+    },
 
 
+    checkObsBl() {
+        this.checkCol = false
+        let posYheroH = this.hero.posY + this.hero.height
+
+        // BL check Positio X and Y Position BL
+        this.generalObstacle.some(obs => {
+
+            if (this.hero.posX <= (obs.obstX + obs.obstW) &&
+                this.hero.posX >= obs.obstX &&
+                posYheroH <= obs.obstY &&
+                posYheroH >= (obs.obstY + obs.obstH)) {
+                //this.hero.speed = 0
+                console.log('BL en al zona X e Y ¡CHOCA!')
+                return this.checkCol = true
+            }
+        })
+
+    },
+
+    checkObsTr() {
+        this.checkCol = false
+        let posXheroW = this.hero.posX + this.hero.width
+
+        // TR check Positio X and Y Position BL
+        this.generalObstacle.some(obs => {
+
+            if (posXheroW >= obs.obstX &&
+                posXheroW <= (obs.obstX + obs.obstW) &&
+                this.hero.posY <= (obs.obstY + obs.obstH) &&
+                this.hero.posY >= obs.obstY) {
+                // this.hero.speed = 0
+                console.log('TR en al zona X e Y ¡CHOCA!')
+                return this.checkCol = true
+
+            }
+        })
+
+    },
+
+    checkObsTl() {
+        this.checkCol = false
+
+        //TL check Positio X and Y Position BL
+        this.generalObstacle.some(obs => {
+
+            if (this.hero.posX <= (obs.obstX + obs.obstW) &&
+                this.hero.posX >= obs.obstX &&
+                this.hero.posY <= (obs.obstY + obs.obstH) &&
+                this.hero.posY >= obs.obstY) {
+                // this.hero.speed = 0
+                console.log('TL en al zona X e Y ¡CHOCA!')
+                return this.checkCol = true
+            }
+        })
+    },
+
+    isCollisionWithMonster() {
+
+        this.monsterRandom.some(mons => {
+            console.log('----------------- colisión monster')
+            console.log(mons.posX, mons.posY, mons.width, mons.height)
+            console.log(this.hero.posX, this.hero.posY, this.hero.width, this.hero.height)
+            console.log('----------------- colisión monster')
+            if (
+                this.hero.posX + this.hero.width >= mons.posX &&
+                this.hero.posY + this.hero.height >= mons.posY &&
+                this.hero.posX <= mons.posX + mons.width
+            ) {
+                return true
+
+            } else {
+                console.log('----------------- colisión monster')
+            }
+        })
+    },
+
+
+    move(dir) {
+
+        let trackPosX = this.hero.posX
+        let trackPosY = this.hero.posY
+        let trackSpeed = this.hero.speed
+
+        switch (dir) {
+            case 'left':
+                this.isCollisionWithMonster()
+                trackPosX -= this.trackSpeed
+                this.checkObsTl()
+                if (this.checkCol === true) {
+                    console.log('estoy en true')
+                    trackSpeed = 0
+                } else {
+                    this.checkObsBl()
+                    if (this.checkCol === true) {
+                        console.log('estoy en true')
+                        trackSpeed = 0
+                    } else {
+                        this.hero.posX -= this.hero.speed
+                    }
+                }
+                break;
+
+            case 'right':
+                this.isCollisionWithMonster()
+                trackPosX += this.trackSpeed
+                this.checkObsTr()
+                if (this.checkCol === true) {
+                    console.log('estoy en true')
+                    trackSpeed = 0
+                } else {
+                    this.checkObsBr()
+                    if (this.checkCol === true) {
+                        console.log('estoy en true')
+                        trackSpeed = 0
+                    } else {
+                        this.hero.posX += this.hero.speed
+                    }
+                }
+                break;
+
+            case 'up':
+                this.isCollisionWithMonster()
+                this.checkObsTr()
+                if (this.checkCol === true) {
+                    console.log('estoy en true')
+                    trackSpeed = 0
+                } else {
+                    this.checkObsTl()
+                    if (this.checkCol === true) {
+                        console.log('estoy en true')
+                        trackSpeed = 0
+                    } else {
+                        this.hero.posY -= this.hero.speed
+                    }
+                }
+                break;
+
+            case 'down':
+                this.isCollisionWithMonster()
+                trackPosY += this.trackSpeed
+                this.checkObsBr()
+                if (this.checkCol === true) {
+                    console.log('estoy en true')
+                    trackSpeed = 0
+                } else {
+                    this.checkObsBl()
+                    if (this.checkCol === true) {
+                        console.log('estoy en true')
+                        trackSpeed = 0
+                    } else {
+                        this.hero.posY += this.hero.speed
+                    }
+                }
+                break;
+
+            default:
+                return null
+                break;
+        }
+    },
 
     // isCollisionWithMonster() {
-
     //     this.monsterRandom.some(mons => {
-    //         console.log(mons.posX, mons.posY, mons.width, mons.height)
-    //         console.log(this.hero.posX, this.hero.posY, this.hero.width, this.hero.height)
     //         if (
-    //             this.hero.posX + this.hero.width >= mons.c &&
+    //             this.hero.posX + this.hero.width >= mons.posX &&
     //             this.hero.posY + this.hero.height >= mons.posY &&
     //             this.hero.posX <= mons.posX + mons.width
     //         ) {
-    //             return this.checkCol = true
+    //             return true
+    //             console.log('hola')
 
-    //         } else {
-    //             console.log('----------------- colisión monster else')
     //         }
     //     })
     // },
-
-
-    isCollisionWithMonster(hero, mos) {
-        if (hero.posX + hero.width > mos.posX &&
-            hero.posX < mos.posX + mos.width &&
-            hero.posY + hero.height > mos.posY &&
-            hero.posY < mos.posY + mos.height) {
-            return true;
-        }
-        return false
-    },
 
     isCollisionWithBullets() {
         this.monsterRandom.some(mons => {
             if (
                 mons.posX + mons.width >= this.hero.bullets.posX &&
                 mons.posY + mons.height >= this.hero.bullets.posY &&
-                mons.posX <= this.hero.bullets.posX + this.hero.width &&
-                mons.posY < this.hero.bullets.posY + this.hero.height
+                mons.posX <= this.hero.bullets.posX + this.hero.bullets.width
             ) {
-                console.log('we shot monster!')
+                console.log('¡balazo al bicho!')
                 console.log(this.monsterRandom)
                 this.audio.monster.play()
                 this.audio.monster.volume = 0.2
@@ -263,7 +348,7 @@ const Game = {
             this.hero.posY + this.hero.height >= this.treasure.posY &&
             this.hero.posX <= this.treasure.posX + this.treasure.width
         ) {
-            console.log('we got JACK!')
+            console.log('colisiona jack!!!!')
             return true
         }
     },
@@ -285,5 +370,4 @@ const Game = {
         document.querySelector('.win').classList.add('view')
         clearInterval(this.interval)
     }
-
 }
