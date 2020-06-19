@@ -1,5 +1,6 @@
 
-# Ironhack_Project1
+# Ironhack Project 1
+FINDING JACK
 Videogame with HTML and Canvas 10x10.
 
 # Objetivo
