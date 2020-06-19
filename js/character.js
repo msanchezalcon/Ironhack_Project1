@@ -1,5 +1,5 @@
 class Hero {
-  constructor(ctx, posX, posY) {
+  constructor(ctx, posX, posY,canvasW, canvasH) {
     this.posX = posX //Math.round(posX)
     this.posY = posY //Math.round(posY)
     this.width = 40
@@ -10,7 +10,8 @@ class Hero {
     this.ctx = ctx
     this.bullets = []
     this.soundShoot = false
-
+    this.canvasW = canvasW
+    this.canvasW = canvasH
   }
 
   draw() {
@@ -30,7 +31,6 @@ class Hero {
 
   shoot(audioShoot) {
     console.log('is shooting!')
-
     this.bullets.push(new Bullets(this.ctx, this.posX, this.posY, this.width, this.height))
     console.log('------3-----', this.bullets)
     // this.audioShoot = true
@@ -49,7 +49,7 @@ class Hero {
 
 
 class Monster {
-  constructor(ctx, posX, posY, monsterCanvasW, monsterCanvasY) {
+  constructor(ctx, posX, posY, monsterCanvasW, monsterCanvasH) {
     this.posX = Math.round((Math.random() * ((450 * 2) + posX) + posX) / 50) * 50
     this.posY = Math.round((Math.random() * ((250 * 2) + posY) + posY) / 50) * 50
     this.width = 50
@@ -60,7 +60,7 @@ class Monster {
     this.speedY = 150
     this.ctx = ctx
     this.monsterCanvasW = monsterCanvasW
-    this.monsterCanvasY = monsterCanvasY
+    this.monsterCanvasH = monsterCanvasH
   }
 
   draw() {

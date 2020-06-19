@@ -70,9 +70,9 @@ const Game = {
                 return this.winGame()
             }
 
-            if (this.touchesBullets()) {
-                console.log("monster is dead")
-            }
+            // if (this.touchesBullets()) {
+            //     console.log("monster is dead")
+            // }
 
         }, 1000)
     },
@@ -81,7 +81,9 @@ const Game = {
         this.hero = new Hero(
             this.ctx,
             this.canvasSize.w / 2 - 450,
-            this.canvasSize.h / 2 - 250
+            this.canvasSize.h / 2 - 250,
+            this.canvasSize.w,
+            this.canvasSize.h
         )
         this.background = new Background(
             this.ctx,
@@ -139,24 +141,28 @@ const Game = {
 
     // CHECK THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     touchesBullets() {
-        console.log(this.bullets, '-------------------------------')
-
+        // this.bullets = new Bullets
+        console.log(this.hero.bullets, '-----------bulletes--------------------')
+        console.log(this.monsterRandom, '-----dmonsster--------------------------')
         for (let i = 0; i < this.monsterRandom.length; i++) {
             let pos = this.monsterRandom[i]
             for (let j = 0; j < this.hero.bullets.length; j++) {
                 let pos2 = this.hero.bullets[j]
+                console.log('entroooo' , pos.posX, pos.posY, pos.height, 'monster', pos2.posX, pos2.radius, pos2.posY)
                 if (pos.posX + pos.width > pos2.posX &&
-                    pos.posX < pos2.posX + pos2.height &&
+                    pos.posX < pos2.posX + (pos2.radius * 2) &&
                     pos.posY + pos.height > pos2.posY &&
-                    pos.posY < pos2.posY + pos2.height) {
+                    pos.posY < pos2.posY + (pos2.radius * 2)) {
                     // Remove the monster
+                    console.log('entroooo')
                     this.monsterRandom.splice(i, 1)
+                    i--
                     this.hero.bullets.splice(j, 1)
                     break;
                 }
             }
         }
-        console.log(this.bullets, '-------------------------------')
+        
     },
 
     overlap(hero, wall) {
@@ -221,6 +227,7 @@ const Game = {
                     break;
                 case this.keys.SPACE:
                     this.hero.shoot(this.audio.bullets)
+                    this.touchesBullets()
                     break;
             }
         }
