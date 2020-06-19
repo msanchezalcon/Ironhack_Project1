@@ -21,7 +21,8 @@ const Game = {
         treasure: new Audio("./audio/whistle.mp3"),
         hero: new Audio("./audio/womancry.mp3"),
         bullets: new Audio("./audio/gun.mp3"),
-        monster: new Audio("./audio/monster.mp3")
+        monster: new Audio("./audio/monster.mp3"),
+        start: new Audio("./audio/start.mp3")
     },
     obstacles: undefined,
     checkCol: undefined,
@@ -48,8 +49,13 @@ const Game = {
         this.reset()
         this.setListeners()
 
+
+
         this.interval = setInterval(() => {
             this.clear()
+            this.audio.start.play()
+            this.audio.start.volume = 0.2
+            this.audio.start.duration = 120
             this.drawAll()
             this.generatorMonster()
 
@@ -57,6 +63,7 @@ const Game = {
             if (this.touchesMonster(this.hero)) {
                 console.log("you lose")
                 this.gameOver()
+
             }
 
             if (this.isCollisionWithJack()) {
@@ -259,6 +266,7 @@ const Game = {
         ) {
             console.log('we got JACK!')
             return true
+
         }
     },
 
