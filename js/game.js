@@ -54,7 +54,7 @@ const Game = {
         this.interval = setInterval(() => {
             this.clear()
             this.audio.start.play()
-            this.audio.start.volume = 0.2
+            this.audio.start.volume = 0.1
             this.audio.start.duration = 120
             this.drawAll()
             //this.generatorMonster()
@@ -269,6 +269,9 @@ const Game = {
         this.audio.treasure.duration = 0.2
         document.querySelector('.win').classList.add('view')
         clearInterval(this.interval)
-    }
+    },
+    // pauseMusic() {
+    //     this.audio.start.pause()
+    // }
 
 }
