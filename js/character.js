@@ -52,8 +52,8 @@ class Monster {
   constructor(ctx, posX, posY, monsterCanvasW, monsterCanvasH) {
   this.posX = Math.round((Math.random() * ((450 * 2) + posX) + posX) / 50) * 50
  this.posY = Math.round((Math.random() * ((250 * 2) + posY) + posY) / 50) * 50
-    //this.posX = posX
-    // this.posY = posY
+   //this.posX = posX
+   // this.posY = posY
     this.width = 50
     this.height = 50
     this.image = new Image()

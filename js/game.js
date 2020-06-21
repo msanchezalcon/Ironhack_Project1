@@ -62,9 +62,7 @@ const Game = {
 
  
              if (this.touchesMonster(this.hero)) {
-              console.log("you losesssssssssssssssssssssssssss")
-              this.gameOver()
-
+              this.gameOver() 
             }
 
             if (this.isCollisionWithJack()) {
@@ -110,7 +108,7 @@ const Game = {
     },
 
     generatorObstacles() {
-        for (let i; this.generalObstacle.length < 40; i++) {
+        for (let i; this.generalObstacle.length < 60; i++) {
             this.obstacles = new Obstacle(this.ctx, this.canvasSize.w / 2 - 450, this.canvasSize.h / 2 - 250, this.canvasSize.w, this.canvasSize.h)
             this.generalObstacle.push(this.obstacles)
         }
@@ -120,7 +118,7 @@ const Game = {
 
         setInterval(() => { 
             this.clearMonster()
-            for (let i; this.monsterRandom.length < 5; i++) {
+            for (let i; this.monsterRandom.length < 10; i++) {
                 this.monsters = new Monster(this.ctx, this.canvasSize.w / 2 - 350, this.canvasSize.h / 2 - 250 , this.canvasSize.w, this.canvasSize.h)
                 this.monsterRandom.push(this.monsters)
                 console.log('-------------------',this.monsterRandom)
