@@ -142,7 +142,6 @@ const Game = {
         return this.monsterRandom.some(monster => this.isCollisionWithMonster(hero, monster))
     },
 
-    // CHECK THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     touchesBullets() {
         for (let i = 0; i < this.monsterRandom.length; i++) {
             let pos = this.monsterRandom[i]
@@ -255,6 +254,7 @@ const Game = {
     gameOver() {
         document.querySelector('.over').classList.add('view')
         console.log('game over')
+        this.audio.start.pause()
         this.audio.hero.play()
         this.audio.hero.volume = 0.2
         this.audio.hero.duration = 1
@@ -263,6 +263,7 @@ const Game = {
 
     winGame() {
         console.log('win game')
+        this.audio.start.pause()
         this.audio.treasure.play()
         this.audio.treasure.volume = 0.2
         this.audio.treasure.duration = 0.2
