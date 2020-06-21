@@ -53,16 +53,16 @@ const Game = {
 
         this.interval = setInterval(() => {
             this.clear()
-            // this.audio.start.play()
-            // this.audio.start.volume = 0.2
-            // this.audio.start.duration = 120
+            this.audio.start.play()
+            this.audio.start.volume = 0.2
+            this.audio.start.duration = 120
             this.drawAll()
             //this.generatorMonster()
             this.touchesBullets()
 
- 
-             if (this.touchesMonster(this.hero)) {
-              this.gameOver() 
+
+            if (this.touchesMonster(this.hero)) {
+                this.gameOver()
             }
 
             if (this.isCollisionWithJack()) {
@@ -99,7 +99,7 @@ const Game = {
         this.generalObstacle.forEach((obs) => obs.draw())
         this.hero.draw()
         this.monsterRandom.forEach((m) => m.draw())
-      
+
         this.treasure.draw()
     },
 
@@ -116,22 +116,22 @@ const Game = {
 
     generatorMonster() {
 
-        setInterval(() => { 
+        setInterval(() => {
             this.clearMonster()
             for (let i; this.monsterRandom.length < 10; i++) {
-                this.monsters = new Monster(this.ctx, this.canvasSize.w / 2 - 350, this.canvasSize.h / 2 - 250 , this.canvasSize.w, this.canvasSize.h)
+                this.monsters = new Monster(this.ctx, this.canvasSize.w / 2 - 350, this.canvasSize.h / 2 - 250, this.canvasSize.w, this.canvasSize.h)
                 this.monsterRandom.push(this.monsters)
-                console.log('-------------------',this.monsterRandom)
-            } 
+                console.log('-------------------', this.monsterRandom)
+            }
         }, 1000)
-        
+
     },
 
     clearMonster() {
-        
-           this.monsterRandom = this.monsterRandom.splice() 
+
+        this.monsterRandom = this.monsterRandom.splice()
     },
-    
+
 
     touchesWalls(hero) {
         return this.generalObstacle.some(obs => this.overlap(hero, obs))
@@ -148,7 +148,7 @@ const Game = {
             let pos = this.monsterRandom[i]
             for (let j = 0; j < this.hero.bullets.length; j++) {
                 let pos2 = this.hero.bullets[j]
-                console.log('monster:' , pos.posX, pos.posY, pos.height, 'bullet', pos2.posX, pos2.radius, pos2.posY)
+                console.log('monster:', pos.posX, pos.posY, pos.height, 'bullet', pos2.posX, pos2.radius, pos2.posY)
                 if (pos.posX < pos2.posX + (pos2.radius * 2) &&
                     pos.posY < pos2.posY + (pos2.radius * 2)) {
                     this.monsterRandom.splice(i, 1)
@@ -158,7 +158,7 @@ const Game = {
                 }
             }
         }
-        
+
     },
 
     overlap(hero, wall) {
