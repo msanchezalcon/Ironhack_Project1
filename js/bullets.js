@@ -1,17 +1,21 @@
 class Bullets {
-    constructor(ctx, heroPosX, heroPosY, heroW, heroH) {
+    constructor(ctx, heroPosX, heroPosY, heroW, heroH,  playerPosY0) {
         this.ctx = ctx
         this.posX = heroPosX + heroW
         this.posY = heroPosY + heroH / 2
-        this.radius = 5
-        this.speedX = 100
-        this.speedY = 1
-        this.gravity = 1
+        this.playerPosY0 = playerPosY0;
+        this.playerHeight = heroH
+
+        this.radius = 10
+        this.speedX = 10
+        this.speedY = 0;
+
+    
     }
 
     draw() {
         this.ctx.beginPath()
-        this.ctx.fillStyle = 'grey'
+        this.ctx.fillStyle = 'black'
         this.ctx.arc(this.posX, this.posY, this.radius, 0, Math.PI * 2)
         this.ctx.fill()
         this.ctx.closePath()
@@ -21,5 +25,6 @@ class Bullets {
 
     move() {
         this.posX += this.speedX
+        this.posY += this.speedY
     }
 }

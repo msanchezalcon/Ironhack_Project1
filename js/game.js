@@ -34,6 +34,7 @@ const Game = {
         SPACE: 32,
         DOWN: 40
     },
+    FTS: 60,
 
     init() {
         this.canvasDom = document.getElementById("board")
@@ -48,21 +49,21 @@ const Game = {
     start() {
         this.reset()
         this.setListeners()
-
-
+        this.generatorMonster()
 
         this.interval = setInterval(() => {
             this.clear()
-            this.audio.start.play()
-            this.audio.start.volume = 0.2
-            this.audio.start.duration = 120
+            // this.audio.start.play()
+            // this.audio.start.volume = 0.2
+            // this.audio.start.duration = 120
             this.drawAll()
-            this.generatorMonster()
+            //this.generatorMonster()
+            this.touchesBullets()
 
-
-            if (this.touchesMonster(this.hero)) {
-                console.log("you lose")
-                this.gameOver()
+ 
+             if (this.touchesMonster(this.hero)) {
+              console.log("you losesssssssssssssssssssssssssss")
+              this.gameOver()
 
             }
 
@@ -70,11 +71,8 @@ const Game = {
                 return this.winGame()
             }
 
-            // if (this.touchesBullets()) {
-            //     console.log("monster is dead")
-            // }
 
-        }, 1000)
+        }, 1000 / this.FTS)
     },
 
     reset() {
@@ -103,7 +101,7 @@ const Game = {
         this.generalObstacle.forEach((obs) => obs.draw())
         this.hero.draw()
         this.monsterRandom.forEach((m) => m.draw())
-        // this.clearMonster()
+      
         this.treasure.draw()
     },
 
@@ -119,16 +117,23 @@ const Game = {
     },
 
     generatorMonster() {
-        this.monsterRandom.push(new Monster(this.ctx, this.canvasSize.w / 2 - 450, this.canvasSize.h / 2 - 250, this.canvasSize.w, this.canvasSize.h))
-        console.log(this.monsterRandom)
+
+        setInterval(() => { 
+            this.clearMonster()
+            for (let i; this.monsterRandom.length < 5; i++) {
+                this.monsters = new Monster(this.ctx, this.canvasSize.w / 2 - 350, this.canvasSize.h / 2 - 250 , this.canvasSize.w, this.canvasSize.h)
+                this.monsterRandom.push(this.monsters)
+                console.log('-------------------',this.monsterRandom)
+            } 
+        }, 1000)
+        
     },
 
     clearMonster() {
-        this.monsterRandom = this.monsterRandom.filter(b => b.posX >= this.canvasSize.w)
-        console.log(this.monsterRandom)
+        
+           this.monsterRandom = this.monsterRandom.splice() 
     },
-
-
+    
 
     touchesWalls(hero) {
         return this.generalObstacle.some(obs => this.overlap(hero, obs))
@@ -141,20 +146,13 @@ const Game = {
 
     // CHECK THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     touchesBullets() {
-        // this.bullets = new Bullets
-        console.log(this.hero.bullets, '-----------bulletes--------------------')
-        console.log(this.monsterRandom, '-----dmonsster--------------------------')
         for (let i = 0; i < this.monsterRandom.length; i++) {
             let pos = this.monsterRandom[i]
             for (let j = 0; j < this.hero.bullets.length; j++) {
                 let pos2 = this.hero.bullets[j]
-                console.log('entroooo' , pos.posX, pos.posY, pos.height, 'monster', pos2.posX, pos2.radius, pos2.posY)
-                if (pos.posX + pos.width > pos2.posX &&
-                    pos.posX < pos2.posX + (pos2.radius * 2) &&
-                    pos.posY + pos.height > pos2.posY &&
+                console.log('monster:' , pos.posX, pos.posY, pos.height, 'bullet', pos2.posX, pos2.radius, pos2.posY)
+                if (pos.posX < pos2.posX + (pos2.radius * 2) &&
                     pos.posY < pos2.posY + (pos2.radius * 2)) {
-                    // Remove the monster
-                    console.log('entroooo')
                     this.monsterRandom.splice(i, 1)
                     i--
                     this.hero.bullets.splice(j, 1)
@@ -243,27 +241,6 @@ const Game = {
         return false
     },
 
-    // isCollisionWithBullets() {
-    //     console.log('-------d----', this.bullets)
-    //     this.monsterRandom.some(mons => {
-    //         if (
-    //             mons.posX + mons.width >= this.hero.bullets.posX &&
-    //             mons.posY + mons.height >= this.hero.bullets.posY &&
-    //             mons.posX <= this.hero.bullets.posX + this.hero.width &&
-    //             mons.posY < this.hero.bullets.posY + this.hero.height
-    //         ) {
-    //             console.log('we shot monster!')
-    //                console.log(this.monsterRandom)
-    //             this.audio.monster.play()
-    //             this.audio.monster.volume = 0.2
-    //             this.audio.monster.duration = 1
-    //             this.monsterRandom.splice(mons)
-    //             clearInterval(this.interval)
-    //         }
-    //     })
-
-    //
-    // },
 
     isCollisionWithJack() {
         if (
